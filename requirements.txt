@@ -1,0 +1,6 @@
+requests~=2.28.1
+pandas~=1.5.2
+schedule~=1.1.0
+matplotlib~=3.6.2
+seaborn~=0.12.1
+numpy~=1.23.5
