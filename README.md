@@ -1,21 +1,19 @@
 # LibChart
 
-A python implementation of information gathering of university library and show them in different charts using PyG2Plot
+一个收集大学图书馆自习室预约信息并使用 Seaborn 可视化的简单 Python 实现。
 
-# Overview
+## 简述
 
-This script is only suitable for online university library self-learning seat reserving and inquiry platform developed by "智位来". The `origin ` website is `https://*.qdexam.com`.  
-And it is only tested on HUAT student accounts.
+本脚本仅适用于由 “智位来” 开发的大学图书馆在线自习座位预约平台，其网址源地址为：`https://*.qdexam.com`。  
+且本脚本仅在 湖北汽院 的账号下测试过。
 
-# Function
+## 功能
 
-- [x] Generate seat selecting heatmap for each room
+- [x] 为每个自习室的座位选择情况生成热力图
 
-- [ ] Visualize online reserving status 24
+- [ ] 可视化每 24 小时的预约情况（粒度 15 分钟）
 
-# Usage
+## 使用
 
-1. run the `data_retriving.py` for amount of time (to gain enough data)
-
-2. then run the `data_handling.py` for data analysis and graphs
-
+运行 `data_retriving.py` 且等待一段时间(1-2天?)，保证获取足够数据  
+运行 `data_handling.py` 以获得数据分析与图像
