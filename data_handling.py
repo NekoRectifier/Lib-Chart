@@ -1,3 +1,4 @@
+
 import os
 
 import matplotlib.pyplot as plt
@@ -9,8 +10,17 @@ import seaborn as sns
 LABELS = ['Unnamed', 'userSex', 'userNum', 'columnNum', 'classroomId', 'notArrive', 'seatRows', 'seatNum',
           'classroomNum', 'rowNum', 'seatColumns', 'seatId', 'state', 'leaveFlag', 'begin', 'end', 'catch_time']
 
+# used to separate different room in func pre_process
+SEAT_NUM_4 = 125
+SEAT_NUM_5 = 150
 
-def merge_csv(csv_files_path):
+
+def merge_csv(csv_files_path: str):
+    """
+    Merge all csv file for further process
+    :param csv_files_path:
+    :return: Pandas.DataFrame ready to use
+    """
     fd_list = []
 
     print('merging...')
@@ -21,6 +31,7 @@ def merge_csv(csv_files_path):
                     pd.read_csv(os.path.join(root, file), index_col=0, header=0))
 
     if len(fd_list) == 0:
+        print('No existing ".csv" files found')
         raise FileNotFoundError
     return pd.concat(fd_list, ignore_index=True)
 
@@ -30,25 +41,40 @@ def pre_process(df_handle: pd.DataFrame):
     Split the data into each room group
     :return: tuple that contains processed data
     """
-    df_1: pd.DataFrame = pd.DataFrame(columns=LABELS)
-    df_2: pd.DataFrame = pd.DataFrame(columns=LABELS)
+    df_4: pd.DataFrame = pd.DataFrame(columns=LABELS)
+    df_5: pd.DataFrame = pd.DataFrame(columns=LABELS)
 
     print('handle', len(df_handle))
+    merged_file_num = int(len(df_handle) / 275)
 
-    for index in range(0, len(df_handle)):
-        row = df_handle.loc[index]
-        # TODO bypass unnecessary items, how?
-        if row['classroomId'] == 154:
-            # 4th floor
-            df_1 = df_1.append(row)
-            # df_1 = pd.concat([row, df_1], axis=0)
-        elif row['classroomId'] == 113:
-            # 5th floor
-            # df_2 = pd.concat([row, df_2], axis=0)
-            df_2 = df_2.append(row)
-        else:
-            print('no')
-    return df_1, df_2
+    # for index in range(0, len(df_handle)):
+    #     row = df_handle.loc[index]
+    #     # TODO bypass unnecessary items, how?
+    #     # seats amount is fixed, why do i need to separate them manually?
+    #     if row['classroomId'] == 154:
+    #         # 4th floor
+    #         df_1 = df_1.append(row)
+    #         # df_1 = pd.concat([row, df_1], axis=0)
+    #     elif row['classroomId'] == 113:
+    #         # 5th floor
+    #         # df_2 = pd.concat([row, df_2], axis=0)
+    #         df_2 = df_2.append(row)
+    #     else:
+    #         print('no')
+
+    for index in range(0, merged_file_num):
+        offset = index * (SEAT_NUM_5 + SEAT_NUM_4)
+
+        df_4 = pd.concat(
+            [df_4,
+             df_handle.iloc[offset: SEAT_NUM_4 + offset]]
+        )
+
+        df_5 = pd.concat(
+            [df_5,
+             df_handle.iloc[SEAT_NUM_4 + offset: SEAT_NUM_4 + SEAT_NUM_5 + offset]]
+        )
+    return df_4, df_5
 
 
 def gen_heat_matrix(data, floor_num=4):
@@ -88,9 +114,8 @@ def gen_heat_matrix(data, floor_num=4):
 
 
 if __name__ == "__main__":
-    print('')
     full_csv = merge_csv('.')
-    print('full_csv', full_csv.to_string())
+
     d4, d5 = pre_process(full_csv)
     heatmap_4 = sns.heatmap(
         gen_heat_matrix(d4, 4),
