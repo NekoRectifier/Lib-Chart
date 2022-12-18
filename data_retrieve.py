@@ -13,7 +13,7 @@ userPwd = userId
 TARGET_DATE = time.strftime("%Y-%m-%d", time.localtime())
 
 BEGIN = TARGET_DATE + ' 08:30:00'
-END = TARGET_DATE + '22:00:00'
+END = TARGET_DATE + ' 22:00:00'
 
 # ------------------------------------------
 
@@ -58,28 +58,6 @@ def init():
 
     userInfoId = json.loads(login.text)["object"]["userInfoId"]
     print("userIId", userInfoId)
-
-    # building_detail = s.post(
-    #     "https://zwyy.qdexam.com/selectInfo/selectCampusAndBuildingInfomation",
-    #     data={'userInfoId': userInfoId},
-    #     headers=headers2
-    # )
-    # existingBuildingIds = []
-    # for i in json.loads(building_detail.text)['list']:
-    #     existingBuildingIds.append(i.get('buildingId'))
-    # print(existingBuildingIds)
-    # Here is the list of all available building in your university,
-
-    # room_detail = s.post( "https://zwyy.qdexam.com/selectInfo/selectEachClassroom", data={'buildingId':
-    # existingBuildingIds[ 0]}, headers=headers2 # might be some useful info in there # # {"success":true,
-    # "message":null,"object":null, "list":[{"total":125,"classroomNum":"四自修室","seatState":0,"fixedBeginDate":null,
-    # "campusId":20,"classroomId":154, "fixedEndDate":null,"fixedReservationTime":null,"floor":4,"buildingId":13},
-    # {"total":150,"classroomNum":"五自修室", "seatState":0,"fixedBeginDate":null,"campusId":20,"classroomId":113,
-    # "fixedEndDate":null, "fixedReservationTime":null,"floor":5,"buildingId":13}],"listString":null,"lists":null,
-    # "sumReservation":null, "sumBlackListCount":null,"sumComplaintListCount":null,"version":null,"url":null,
-    # "token":null,"userCount":null, "recommendList":null} )
-    #
-    # print(room_detail.text)
 
 
 def get_seats_data(room_id, begin_time="08:30:00", end_time="22:00:00"):
